@@ -1,0 +1,4 @@
+/.env
+/th_tracking/
+.idea/
+__pycache__/

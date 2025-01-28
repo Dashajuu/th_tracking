@@ -8,9 +8,6 @@ class ProfileModelTest(TestCase):
     databases = {'test'}
 
     def setUp(self):
-        User.objects.all().delete()
-        Profile.objects.all().delete()
-
         self.user = User.objects.create_user(username='testuser', password='testpassword')
 
         self.profile = Profile.objects.create(

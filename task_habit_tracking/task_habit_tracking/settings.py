@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+import sys
 
 from dotenv import load_dotenv, find_dotenv
 from pathlib import Path
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'habits',
     'profiles',
     'tasks',
+    'finance',
 ]
 
 MIDDLEWARE = [
@@ -94,8 +96,18 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
-    }
+    },
+    'test': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('TEST_DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+    },
 }
+
+DATABASE_ROUTERS = ['task_habit_tracking.routers.TestDBRouter']
 
 
 # Password validation
@@ -139,6 +151,7 @@ STATICFILES_DIRS = [
 ]
 
 # Media files for avatars
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -148,3 +161,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Test settings
+
+if 'test' in sys.argv:
+    DATABASES['default'] = DATABASES['test']

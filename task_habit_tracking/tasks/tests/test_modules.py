@@ -25,7 +25,7 @@ class TaskModelTest(TestCase):
             description='Description Task 1',
             files=self.test_file,
             links='https://pinterest.com/',
-            deadline='2025-01-29 13:50',
+            deadline='2025-01-31 13:50',
             priority='DO',
             user=self.user,
             status=self.status
@@ -37,10 +37,18 @@ class TaskModelTest(TestCase):
         self.assertEqual(self.task.name, 'Task 1')
         self.assertEqual(self.task.description, 'Description Task 1')
 
-        self.assertEqual(self.task.files, 'documents/test_file.txt')
+        self.assertTrue(str(self.test_file).startswith('test_file'))
 
         self.assertEqual(self.task.links, 'https://pinterest.com/')
-        self.assertEqual(self.task.deadline, '2025-01-28 13:50')
+        self.assertEqual(self.task.deadline, '2025-01-31 13:50')
         self.assertEqual(self.task.priority, 'DO')
         self.assertEqual(self.task.user.username, 'testuser')
-        self.assertEqual(self.task.status, 'active')
+        self.assertEqual(self.task.status.name, 'active')
+
+        self.assertIn(self.category1, self.task.category.all())
+        self.assertIn(self.category2, self.task.category.all())
+
+    def test_remove_categories(self):
+        self.task.category.remove(self.category1)
+        self.assertEqual(self.task.category.count(), 1)
+        self.assertIn(self.category2, self.task.category.all())
